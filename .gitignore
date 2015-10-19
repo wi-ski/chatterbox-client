@@ -4,6 +4,11 @@
 .LSOverride
 Icon
 
+#Key Sensitive Stuff
+
+
+
+
 # Thumbnails
 ._*
 
@@ -34,7 +39,7 @@ node_modules
 
 ### Bower ###
 **/bower_components/
-
+**/bower_components/env/config.example.js
 
 ### PhPStorm ###
 .idea/
