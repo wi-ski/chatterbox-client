@@ -27,7 +27,13 @@ body {
 }
 
 #main ul {
+    list-style-type:none;
     padding-left: 20px;
+}
+#main ul li {
+    background-color: rgb(238, 238, 238);
+    margin: 0 10px 10px 0;
+    background-color:green;
 }
 
 #main .error {
