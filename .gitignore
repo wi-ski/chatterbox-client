@@ -39,7 +39,7 @@ node_modules
 
 ### Bower ###
 **/bower_components/
-**/bower_components/env/config.example.js
+**/env/config.example.js
 
 ### PhPStorm ###
 .idea/

@@ -38,6 +38,14 @@ $(document).ready(function(){
   });
 
 
+  app.beFriend = function(){
+
+
+
+
+
+  }
+
 
   app.clear = function(){
 
@@ -57,9 +65,6 @@ $(document).ready(function(){
         console.error('chatterbox: Failed to recieve message',data);
       }
     });
-
-
-
   }
 
 
@@ -115,6 +120,7 @@ $(document).ready(function(){
           $thing.on("click",function(e){
             app.deleteMsg(JSON.parse($(this).attr("data")).objectId);
           })
+          $thing.prepend($("<p>"+escapeHtml(entry.username)+"</p>"))
           setTimeout(function(){msg_board.append($thing)},1000);
         })
       },
