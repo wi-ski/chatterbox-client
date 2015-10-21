@@ -4,7 +4,9 @@ body {
     padding: 0 25px;
     font-family: arial, sans-serif;
 }
-
+.follow{
+    background-color: red;
+}
 #main, #chats {
     width: 500px;
     margin: auto;

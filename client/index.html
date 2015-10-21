@@ -1,49 +1,227 @@
-<!doctype html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>chatterbox</title>
-    <link rel="stylesheet" href="styles/styles.css">
-
-    <!-- dependencies -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/underscore/underscore-min.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
     <script src="bower_components/backbone/backbone.js"></script>
-    <script src="/Users/student/js-cookie/src/js.cookie.js"></script>
-    <!-- your scripts -->
     <script src="env/config.example.js"></script>
-    <script src="scripts/app.js"></script>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" crossorigin="anonymous"></script>
   </head>
+
   <body>
-
-
-
-    <div id="main">
-      <div class="leftCol">
-        <ul class="users_listing">
-          
-        </ul>      
-
+  <div class="col-md-3">
+    <div class="jumbotron container-fluid">
+      <div class="input-group">
+        <input placeholder="Enter your message... " type="text" class="form-control" aria-label="...">
+        <div class="input-group-btn">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Room <span class="caret"></span></button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><a href="#">Room</a></li>
+            <li><a href="#">Another Room</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+        </div><!-- /btn-group -->
       </div>
-
-      <div class="centerCol">
-        <h1>chatterbox</h1>
-        <input type="text" placeholder="User Name" name="username" class="userName">
-        <input type="text" placeholder="Any Message" name="Message" class="userMessage">
-
-        <ul class="msg_board">
-          
-        </ul>
-
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="jumbotron container-fluid commentList">
+    <ul class="list-group messagesContainer">
+      <!-- <li class="list-group-item">
+        <h5><span class="badge"style="font-weight:bold">X</span> UserName1<span class="badge" style="float:right;background-color: rgb(229, 83, 83);">What is up bro? Let us chill!</span></h5>
         
-      </div>
-
-      <div class="rightCol">
+      </li>
+      <li class="list-group-item">
+        <h5><span class="badge"style="font-weight:bold">X</span> UserName2<span class="badge" style="float:right;background-color: rgb(63, 63, 255);">Yea! Lets meet up!</span></h5>
         
-      </div>
-
+      </li>
+      <li class="list-group-item">
+        <h5><span class="badge"style="font-weight:bold">X</span> UserName1<span class="badge" style="float:right;background-color: rgb(229, 83, 83);">WOOT! I am teh Manu~</span></h5>
+        
+      </li> -->
+    </ul>
+    </div>
+  </div>  
+  <div class="col-md-3">
+    <div class="jumbotron container-fluid">
+    <h2>Users<h2>
+    <ul class="list-group">
+      <li class="list-group-item"><span class="label label-info"><small style="color:white;">User1</small></span></li>
+      <li class="list-group-item"><span class="label label-info"><small style="color:white;">User2</small></span></li>
+      <li class="list-group-item"><span class="label label-info"><small style="color:white;">User3</small></span></li>
+    </ul>
 
     </div>
-    <div id="chats"></div>
+  </div>
+    <script>
+/* Before you start this section, you should at least skim through the
+ * documentation. Do not look through this section until you've completed
+ * the ones before it!
+ *
+ * If you feel lost, ask your peers; if you're still lost, call for halp!
+ *
+ * Remember, always, to __check [the documentation](http://backbonejs.org/)__!
+ */
+
+/* - Backbone COLLECTION ------------------------------------------------------
+ * Collections are a way of organizing your models.
+ * Backbone gives us some conveniences, such as propagating events,
+ * that makes them a breeze to use. I'll start you off both model and view: */
+var Message = Backbone.Model.extend({
+  /* This is purposely different from the previous steps.
+   * Make sure to do those first (!!!) and then check here for new patterns. */
+  // url:'https://api.parse.com/1/classes/chatterbox/',
+
+  initialize: function(messageObj) {
+    this.set('message', messageObj.text);
+    if (username) { this.set('username', username); }
+  },
+  // Default to 0 username
+  defaults: {
+    username: "No user was specified | What happened?",
+    message: "No message was provided | Why you no say anything?"
+  },
+  // Convenience function over `model.get/set`
+  username: function(username) {
+    if (arguments.length) {
+      this.set('username', username);
+      return username;
+    } else {
+      return this.get('username');
+    }
+  }
+});
+
+
+var MessageView = Backbone.View.extend({
+  initialize: function() {
+    this.model.on('change:username', this.render, this);
+  },
+  render: function() {
+    var html = [
+      // '<div>',
+      //   '<span class="username">',
+      //     this.model.get('username'),
+      //   '<span>',
+      //   '<span class="Message">',
+      //     this.model.get('message'),
+      //   '</span>',
+      //   '</br>',
+      // '</div>'
+      '<li class="list-group-item">',
+        '<h5>',
+           '<span class="badge"style="font-weight:bold">X</span>',
+              this.model.get(username),
+            '<span class="badge" style="float:right;background-color: rgb(229, 83, 83);">',
+              this.mode.get(message),
+            '</span>',
+        '</h5>',
+      '</li>'
+    ].join('');
+
+    return this.$el.html(html);
+    /* Rendering raw model attributes like this could expose us
+     * to XSS attacks. In a real application, make sure to use
+     * templating to protect against this, such as
+     * <%- escaped interpolation %> in underscore's _.template.
+     *
+     * For now, we won't worry about that. */
+  }
+});
+/* Now that we have a model, let's imagine what would happen were we to have
+ * many, many Messages: we would put them in a collection: */
+var Messages = Backbone.Collection.extend({
+  /* Everything in our collection must be an instance of this model.
+   * Setting this gives us some convenience functions, but is not
+   * necessary; check out the documentation:
+   * http://backbonejs.org/#Collection-model */
+  url:'https://api.parse.com/1/classes/chatterbox/',
+  model: Message
+});
+
+/* The reason we want a collection is to track our models.
+ * Let's use this collection to:
+ * - display every message in it
+ * - count the total number of votes, across all comments
+ *
+ * That means we need to write a new view: */
+var MessageColView = Backbone.View.extend({
+  /* Again, we use our initialize function to register listeners.
+   * In this case, we want to know when votecounts of the models
+   * in our collection changes. */
+  initialize: function() {
+    /* Backbone events bubble up through collections,
+     * so monitoring a model in a collection is easy! */
+     // console.log("qq",this.collection.on('change:message', this.render, this))
+    this.collection.on('change:message', this.render, this);
+  },
+
+  // Now we must render the collection:
+  render: function() {
+    // var html = [
+    //   '<ul>',
+    //   '</ul>',
+    //   '<span class="username">',
+    //     // The total number of username
+    //     this.collection.reduce(function(memo, message) {
+    //       return memo + message.get('username');
+    //     }, 0),
+    //   '</span>'
+    // ].join('');
+
+    // this.$el.html(html);
+    /* Render each model in the collection as a list item (<li>).
+     * Remember, we have the underscore functions: */
+    // this.$el.find('ul').append(this.collection.map(function(message) {
+    $('.messagesContainer').append(this.collection.map(function(message) {
+      // return "<li>" + message.get("message") + "</li>"
+      return '<li class="list-group-item">\
+                <h5>\
+                  <span class="badge"style="font-weight:bold">X</span>' 
+                  + message.get("username") + 
+                  '<span class="badge" style="float:right;background-color: rgb(229, 83, 83);">' 
+                  + message.get("message") + 
+                  '</span>\
+                </h5>\
+              </li>'
+
+      // YOUR CODE HERE
+    }));
+
+    return this.$el;
+  }
+});
+
+      // That's it! Let's watch some stats:
+
+      /* Create a few new message models using our message class: */
+
+      // Add all of these to a new collection:
+      // var messages = new Messages(commentList);
+      var messageCol = new Messages();
+      
+      messageCol.fetch({
+
+          success: function (message) {
+              console.log(message.toJSON()[0].results);
+              // messagesView = new MessageColView({ collection: message.toJSON()[0].results })
+              // messagesList = message.toJSON();
+          },
+          error:function(e){
+            console.log("ERRROR",e)
+          }
+      });
+
+
+
+      // Associate a view to the collection:
+      var messagesView = new MessageColView({ collection: messageCol });
+
+      // Append it to the page (uncomment this when you are ready):
+      $('body').append(messagesView.render());
+    </script>
   </body>
 </html>
